@@ -38,7 +38,6 @@ class Resize:
         # Get current dimensions
         c, h, w = image.shape
         
-        # Skip if already the right size
         if h == self.output_size and w == self.output_size:
             return sample
         
@@ -52,7 +51,6 @@ class Resize:
         
         # Resize mask - preserve mask being in [0, 1]
         mask_np = mask.numpy()
-        # Fix: Use numpy's dtype, not torch's
         resized_mask = np.zeros((mask_np.shape[0], self.output_size, self.output_size), dtype=np.float32)
         for i in range(mask_np.shape[0]):
             channel = mask_np[i]
@@ -142,7 +140,7 @@ class ImprovedRandomAugmentation:
         # Gaussian noise (especially helpful for medical imaging)
         if np.random.random() > 0.7:
             for i in range(image_np.shape[0]):
-                noise = np.random.normal(0, 0.015, image_np[i].shape)  # Adjust sigma as needed
+                noise = np.random.normal(0, 0.015, image_np[i].shape)  
                 image_np[i] = image_np[i] + noise
                 image_np[i] = np.clip(image_np[i], 0, 1)
         
